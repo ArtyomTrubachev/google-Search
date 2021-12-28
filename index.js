@@ -23,6 +23,7 @@ document.querySelector('.imgSearch').addEventListener('click', ()=> {
     //.then(data => console.log(data));
 })
 
+
     function showSearchResult(apidata) {
 
         let massive = [];
@@ -40,42 +41,25 @@ document.querySelector('.imgSearch').addEventListener('click', ()=> {
                 massive[`${i}`] = apidata.slice(index, numResultinPage);
             index = numResultinPage;
             numResultinPage += 10;
-            //console.log(massive[i], index, numResultinPage);
             }
         //-----------------------------------------------------------------------
 
-/*         console.log(massive[3][1].link);
-        console.log(massive[3][1].title);
-        console.log(massive[3][1].description); */
-
         showPagination(numberOfPage);
         changeSearchResult(0, massive);
-        
-        
-       /*  for (let i = 0; i < numResultinPage; i++) {   
-            document.querySelector('.searchResult').innerHTML += `
-            <div class="searchResultBlock">
-            <cite class="cite">${apidata[i].link}</cite>
-            <h3 class="wordsUnderCite">${apidata[i].title}</h3>
-            <p class="searchInfo">${apidata[i].description}</p> 
-            </div>
-            `   
-        }   */
         
         document.querySelector(".pagination").addEventListener('click', ()=> {
             let target = event.target;
             document.querySelector('.searchResult').innerHTML = '';
             
+            // Для удаления класса у неактивных ссылок
+            let r = document.querySelectorAll('a');
+            console.log(r);
+            r.forEach(element => {
+                element.classList.remove('active');
+            })
+            //--------------------------------------------
             changeSearchResult(target.className, massive); 
-
-/*             for (let i = 0; i < numResultinPage; i++) {   
-                document.querySelector('.searchResult').innerHTML += `
-                <div class="searchResultBlock">
-                <cite class="cite">${massive[target.className][i].link}</cite>
-                <h3 class="wordsUnderCite">${massive[target.className][i].title}</h3>
-                <p class="searchInfo">${massive[target.className][i].description}</p> 
-                </div> `   
-            }   */
+            target.classList.add('active');
         }) 
     }
 
@@ -101,15 +85,7 @@ function clearInput() {
 // Изменения блока div c выводом на экран результатов
 
 function changeSearchResult(index, massive) {
-
-/*     for (let i = 0; i < numResultinPage; i++) {   
-        document.querySelector('.searchResult').innerHTML += `
-        <div class="searchResultBlock">
-        <cite class="cite">${massive[index][i].link}</cite>
-        <h3 class="wordsUnderCite">${massive[index][i].title}</h3>
-        <p class="searchInfo">${massive[index][i].description}</p> 
-        </div> `    
-    } */
+    
     array = massive[index];
     array.forEach(element => {
         document.querySelector('.searchResult').innerHTML += `
