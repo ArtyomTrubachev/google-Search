@@ -20,57 +20,64 @@ document.querySelector('.imgSearch').addEventListener('click', ()=> {
     }
     getData(url)
     .then(data => showSearchResult(data.results))
-    .then(data => console.log(data));
+    //.then(data => console.log(data));
 })
 
     function showSearchResult(apidata) {
 
-            let massive = [];
-            let numberOfPage = Math.ceil(apidata.length / 10);
-            let numResultinPage = 10;   
-            let numResultinLastPage = apidata.length - (numberOfPage-1) * numResultinPage;           
-            let index = 0;
+        let massive = [];
+        let numberOfPage = Math.ceil(apidata.length / 10);
+        let numResultinPage = 10;   
+        let numResultinLastPage = apidata.length - (numberOfPage-1) * numResultinPage;           
+        let index = 0;
 
-            // Разбивка результата запроса (массива) на подмассивы
+        // Разбивка результата запроса (массива) на подмассивы
 
-            for (let i = 0; i < numberOfPage; i++) {
-                if (i == numberOfPage) 
-                    massive[`${i}`] = apidata.slice(index, i * 10 + numResultinLastPage);
-                else 
-                    massive[`${i}`] = apidata.slice(index, numResultinPage);
-                index = numResultinPage;
-                numResultinPage += 10;
-                console.log(massive[i], index, numResultinPage);
-                }
-            //-----------------------------------------------------------------------
+        for (let i = 0; i < numberOfPage; i++) {
+            if (i == numberOfPage) 
+                massive[`${i}`] = apidata.slice(index, i * 10 + numResultinLastPage);
+            else 
+                massive[`${i}`] = apidata.slice(index, numResultinPage);
+            index = numResultinPage;
+            numResultinPage += 10;
+            //console.log(massive[i], index, numResultinPage);
+            }
+        //-----------------------------------------------------------------------
 
-            for (let i = 0; i < numResultinPage; i++) {   
+/*         console.log(massive[3][1].link);
+        console.log(massive[3][1].title);
+        console.log(massive[3][1].description); */
+
+        showPagination(numberOfPage);
+        changeSearchResult(0, massive);
+        
+        
+       /*  for (let i = 0; i < numResultinPage; i++) {   
+            document.querySelector('.searchResult').innerHTML += `
+            <div class="searchResultBlock">
+            <cite class="cite">${apidata[i].link}</cite>
+            <h3 class="wordsUnderCite">${apidata[i].title}</h3>
+            <p class="searchInfo">${apidata[i].description}</p> 
+            </div>
+            `   
+        }   */
+        
+        document.querySelector(".pagination").addEventListener('click', ()=> {
+            let target = event.target;
+            document.querySelector('.searchResult').innerHTML = '';
+            
+            changeSearchResult(target.className, massive); 
+
+/*             for (let i = 0; i < numResultinPage; i++) {   
                 document.querySelector('.searchResult').innerHTML += `
                 <div class="searchResultBlock">
-                <cite class="cite">${apidata[i].link}</cite>
-                <h3 class="wordsUnderCite">${apidata[i].title}</h3>
-                <p class="searchInfo">${apidata[i].description}</p> 
-                </div>
-                `   
-            }  
-            showPagination(numberOfPage);
-
-
-
-            document.querySelector(".pagination").addEventListener('click', ()=> {
-                let target = event.target;
-                document.querySelector('.searchResult').innerHTML = '';
-                
-                for (let i = 0; i < numResultinPage; i++) {   
-                    document.querySelector('.searchResult').innerHTML += `
-                    <div class="searchResultBlock">
-                    <cite class="cite">${massive[target.className][i].link}</cite>
-                    <h3 class="wordsUnderCite">${massive[target.className][i].title}</h3>
-                    <p class="searchInfo">${massive[target.className][i].description}</p> 
-                    </div> `   
-                }  
-            }) 
-        }
+                <cite class="cite">${massive[target.className][i].link}</cite>
+                <h3 class="wordsUnderCite">${massive[target.className][i].title}</h3>
+                <p class="searchInfo">${massive[target.className][i].description}</p> 
+                </div> `   
+            }   */
+        }) 
+    }
 
 // Показать пагинацию
 
@@ -93,15 +100,25 @@ function clearInput() {
 
 // Изменения блока div c выводом на экран результатов
 
-function changeSearchResult(index) {
+function changeSearchResult(index, massive) {
 
-    for (let i = 0; i < numResultinPage; i++) {   
+/*     for (let i = 0; i < numResultinPage; i++) {   
         document.querySelector('.searchResult').innerHTML += `
         <div class="searchResultBlock">
         <cite class="cite">${massive[index][i].link}</cite>
         <h3 class="wordsUnderCite">${massive[index][i].title}</h3>
         <p class="searchInfo">${massive[index][i].description}</p> 
         </div> `    
-    }
+    } */
+    array = massive[index];
+    array.forEach(element => {
+        document.querySelector('.searchResult').innerHTML += `
+        <div class="searchResultBlock">
+        <cite class="cite">${element.link}</cite>
+        <h3 class="wordsUnderCite">${element.title}</h3>
+        <p class="searchInfo">${element.description}</p> 
+        </div> `
+    });
+    console.log(array);
 }
 //-----------------------------------------------------------------------------------
